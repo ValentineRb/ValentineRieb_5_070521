@@ -45,6 +45,14 @@ h2 {
   color: var(--fontGrey)!important;
 }
 
+.bottom-footer {
+  bottom:0;
+}
+
+.col {
+  border: 2px solid red;
+}
+
 /* Cards */
 .card {
   background-color: var(--backgroundColor)!important;

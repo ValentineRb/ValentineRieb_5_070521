@@ -1,64 +1,46 @@
-/* Gère l'affichage et les interactions de la page d'accueil
- ** Récupération des données avec fetch(), appel du serveur.
- ** Transformation des données en json
- ** Pour vérifier si l'Api fonctionne bien : console.log(jsonListItem)
- ** Une fois les items récupérés on doit les afficher: avec une boucle for of:
- ** 1.Pour chaque Item on va créer un objet Item en lui passant le json.
- ** 2.On veut que ça s'affiche dans le container HTML après le H1: on inclue des variables interpolées:
- ** name + price + image (on les retrouve ds l'Api)
- */
+// -------------------------------------------------------------------------------------------
+/// Code à exécuter lors du chargement de la page.
+/// L'écriture ci-dessous est la syntaxe usuelle pour définir et appeler une fonction fléchée en même temps:
+/// ( keyword (params) => instructions )( args ) - le keyword peut être vide ou async par exemple.
+/// Cette syntaxe évite de faire un appel et une définition séparés d'une fonction main().
+(async () => {
+  const products = await getProductsFromServer()
+  displayAllProducts(products)
+})()
 
-fetch("http://localhost:3000/api/teddies")
-  .then((data) => data.json())
-  .then((jsonListItem) => {
-    // fetch("http://localhost:3000/api/teddies").then(function(data){
-    //  return data.json();
-    // }).then(function(jsonListItem){
-    //   console.log(jsonListItem);
-    // })
-    for (let jsonItem of jsonListItem) {
-      let item = new Item(jsonItem);
-      document.querySelector(".row").innerHTML += 
-      `<div class="col">
-        <a class="card-link" href="#">
-            <div class="card h-100">
-              <div class="card-header">
-                <h5 class="card-title text-center">${item.name}</h5>
-              </div>
-              <img src="${item.imageUrl}" class="card-img-top h-100" alt="oursons">
-              <div class="card-footer text-center">
-                <p>${item.price} €</p>
-              </div>
-            </div>
-          </a>
-        </div>`;
-    }
-  });
-
-/** ScrollToTop Button **/
-
-let scrollToTopBtn = document.querySelector(".scrollToTopBtn");
-let rootElement = document.documentElement;
-
-function handleScroll() {
-  // Do something on scroll
-  let scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
-  if (rootElement.scrollTop / scrollTotal > 0.7) {
-    // Show button
-    scrollToTopBtn.classList.add("showBtn");
-  } else {
-    // Hide button
-    scrollToTopBtn.classList.remove("showBtn");
-  }
+// -------------------------------------------------------------------------------------------
+/// 1. On veut envoyer une requête à l'API pour qu'elle nous retourne des données.
+/// Données retournées = httpResponseBody 
+/// 2. Pour lire la httpResponseBody on appelle la méthode json()
+/// Données retournées = Une promesse qui s'auto-résout en renvoyant le corps/body de la requête parsée au format JSON.
+/// 3. Si une erreur est rencontrée, elle est utilisée pour renvoyer un message d'erreur à l'utilisateur.
+async function getProductsFromServer() {
+  return fetch("http://localhost:3000/api/teddies")
+    .then(httpResponseBody => httpResponseBody.json())
+      .catch(error => alert(error.message + ": La connexion au serveur n'a pas pu être effectué."))
 }
 
-function scrollToTop() {
-  // Scroll to top logic
-  rootElement.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
+// -------------------------------------------------------------------------------------------
+/// Afficher tous les produits en les parcourant un par un.
+function displayAllProducts(products) {
+  products.forEach(product => displaySingleProduct(product))
 }
 
-scrollToTopBtn.addEventListener("click", scrollToTop);
-document.addEventListener("scroll", handleScroll);
+// -------------------------------------------------------------------------------------------
+/// Afficher un seul produit.
+function displaySingleProduct(product) {
+  // 1. Récupérer l'élément template qui est invisible lors du chargement de la page.
+  const templateElement = document.getElementById("template-card")
+
+  // 2. Clôner le template.
+  let cloneElement = document.importNode(templateElement.content, true)
+
+  // 3. Remplir le clône avec les informations du product.
+  cloneElement.getElementById("card-title").textContent = product.name
+  cloneElement.getElementById("card-image").src = product.imageUrl
+  cloneElement.getElementById("card-footer-text").textContent = product.price
+  cloneElement.getElementById("card-link").href = `/Front_End/view/product/product.html?id=${product._id}` // URL product personnalisé
+
+  // 4. Ajouter le clône dans le DOM à l'endroit approprié, à savoir le parent contenant le child template.
+  document.getElementById("row").appendChild(cloneElement)
+}
