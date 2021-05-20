@@ -1,0 +1,149 @@
+/* Variables */
+:root {
+  --fontGrey:rgb(73, 68, 68);
+  --backgroundColor: #f3e9f1;
+}
+
+/* Layout */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Newsreader', sans-serif!important;
+}
+
+.container
+{
+  padding: 15px;
+}
+
+main {
+margin-top: 30px;
+}
+
+h1, h2 {
+  color: var(--fontGrey);
+}
+
+h2 {
+  font-style: italic;
+  font-size: 25px!important;
+}
+
+/* Navbar */
+.nav-link {
+  color: var(--fontGrey)!important;
+}
+
+.nav-item > a:hover {
+  text-decoration: underline;
+}
+
+.navbar-text {
+  font-size: 14px;
+  color: var(--fontGrey)!important;
+}
+
+/* Cards */
+.card {
+  background-color: var(--backgroundColor)!important;
+}
+
+.card-link{
+  text-decoration: none;
+}
+
+.card-title, .card-footer {
+  text-decoration: none;
+  color: var(--fontGrey);
+}
+
+.card-title:hover {
+  text-decoration: underline;
+}
+
+.card-footer {
+  height: 40px!important;
+}
+
+/* Scroll Button */
+.scrollToTopBtn {
+  background-color: #ac87f8;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  font-size: 10px;
+  line-height: 30px;
+  width: 30px;
+  /* place it at the bottom right corner */
+  position: fixed;
+  bottom: 40px;
+  right: 20px;
+  /* keep it at the top of everything else */
+  z-index: 100;
+  /* hide with opacity */
+  opacity: 0;
+  /* also add a translate effect */
+  transform: translateY(100px);
+  /* and a transition */
+  transition: all .5s ease
+}
+    
+.showBtn {
+  opacity: 1;
+  transform: translateY(0)
+}
+
+
+
+
+
+
+
+
+
+
+/* @media screen and (max-width: 780px){
+  body{
+      font-size: 1.4rem;
+  }
+}
+
+.article{
+  border: none;
+}
+
+.article .card-header{
+  background-color: #343a40;
+
+}
+
+.article .card-body{
+  background-color: rgba(0,0,0,0.4);
+}
+
+.article .publication-date{
+  text-align: right;
+}
+
+.article .addFavorite{
+  font-size: 1.4rem;
+  position: absolute;
+  top: 80px;
+  right: 10px;
+}
+
+.article .addFavorite .far{
+  color: rgba(0,0,0,0.2);
+}
+
+.article .addFavorite:hover{
+  color: yellow;
+  cursor: pointer;
+}
+
+.article .addFavorite.activated{
+  color: yellow;
+}   */
