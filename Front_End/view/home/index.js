@@ -38,7 +38,7 @@ function displaySingleProduct(product) {
   // 3. Remplir le clône avec les informations du product.
   cloneElement.getElementById("card-title").textContent = product.name
   cloneElement.getElementById("card-image").src = product.imageUrl
-  cloneElement.getElementById("card-footer-text").textContent = product.price
+  cloneElement.getElementById("card-footer-text").innerHTML = product.price / 100 + `.00 €`
   cloneElement.getElementById("card-link").href = `/Front_End/view/product/product.html?id=${product._id}` // URL product personnalisé
 
   // 4. Ajouter le clône dans le DOM à l'endroit approprié, à savoir le parent contenant le child template.

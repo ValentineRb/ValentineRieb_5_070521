@@ -1,83 +1,55 @@
-/* Variables */
+/**************************/
+/*** VARIABLES ***/
 :root {
-  --fontGrey:rgb(73, 68, 68);
+  --fontGrey: rgb(73, 68, 68);
+  --lineGrey: rgb(200, 201, 202);
   --backgroundColor: #f3e9f1;
+  --buttonColor: #6b305f;
 }
 
-/* Layout */
+/**************************/
+/*** LAYOUT ***/
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  font-family: 'Newsreader', sans-serif!important;
+  font-family: "Newsreader", sans-serif;
 }
 
-.container
-{
+.container {
   padding: 15px;
 }
 
 main {
-margin-top: 30px;
+  margin-top: 30px;
 }
 
-h1, h2 {
+footer {
+  width:100%;
+}
+
+/**************************/
+/*** ELEMENTS ***/
+h1,
+h2,
+h3 {
   color: var(--fontGrey);
 }
 
 h2 {
   font-style: italic;
-  font-size: 25px!important;
+  font-size: 25px;
 }
 
-/* Navbar */
-.nav-link {
-  color: var(--fontGrey)!important;
+h3 {
+  font-size: 20px;
 }
 
-.nav-item > a:hover {
-  text-decoration: underline;
-}
-
-.navbar-text {
-  font-size: 14px;
-  color: var(--fontGrey)!important;
-}
-
-.bottom-footer {
-  bottom:0;
-}
-
-.col {
-  border: 2px solid red;
-}
-
-/* Cards */
-.card {
-  background-color: var(--backgroundColor)!important;
-}
-
-.card-link{
-  text-decoration: none;
-}
-
-.card-title, .card-footer {
-  text-decoration: none;
-  color: var(--fontGrey);
-}
-
-.card-title:hover {
-  text-decoration: underline;
-}
-
-.card-footer {
-  height: 40px!important;
-}
-
-/* Scroll Button */
-.scrollToTopBtn {
-  background-color: #ac87f8;
+/**************************/
+/*** SCROLL BUTTON ***/
+.scroll-to-the-top-btn {
+  background-color: var(--buttonColor);
   border: none;
   border-radius: 50%;
   color: white;
@@ -92,66 +64,118 @@ h2 {
   /* keep it at the top of everything else */
   z-index: 100;
   /* hide with opacity */
-  opacity: 0;
+  /* opacity: 0; */
   /* also add a translate effect */
   transform: translateY(100px);
   /* and a transition */
-  transition: all .5s ease
+  transition: all 1s ease;
 }
-    
-.showBtn {
+
+.show-btn {
   opacity: 1;
-  transform: translateY(0)
+  transform: translateY(0);
+}
+
+/**************************/
+/*** NAVBAR ***/
+#logo{
+  width:177px;
+  height:80px;
+}
+
+.navbar-light {
+  background-color:var(--backgroundColor);
+}
+
+.nav-link {
+  color: var(--fontGrey);
+}
+
+.nav-item > a:hover {
+  text-decoration: underline;
+}
+
+.navbar-text {
+  font-size: 14px;
+  color: var(--fontGrey);
+}
+
+.bottom-footer {
+  bottom: 0;
+}
+
+/**************************/
+/*** CARDS ***/
+.card {
+  background-color: var(--backgroundColor);
+}
+
+.card-link {
+  text-decoration: none;
+}
+
+.card-title,
+.card-footer {
+  text-decoration: none;
+  color: var(--fontGrey);
+}
+
+.card-title:hover {
+  text-decoration: underline;
+}
+
+.card-footer {
+  height: 40px;
+}
+
+/**************************/
+/*** PRODUCT PAGE ***/
+
+#selection-image {
+  border: 1px solid var(--lineGrey);
+  width: 90%;
+  margin-bottom: 20px;
+}
+
+button {
+  color: var(--buttonColor);
+  background-color: transparent;
+  border-radius: 5px;
+  border: 2px solid var(--buttonColor);
+  font-style: italic;
+}
+
+button:hover {
+  background-color: var(--backgroundColor);
+  color: var(--buttonColor);
+  border: 2px solid var(--buttonColor);
+}
+
+select {
+  font-size: 16px;
+  padding: 8px;
 }
 
 
-
-
-
-
-
-
-
-
-/* @media screen and (max-width: 780px){
-  body{
-      font-size: 1.4rem;
-  }
+/**************************/
+/*** BASKET PAGE ***/
+#form-quantity {
+  width: 80px;
 }
 
-.article{
-  border: none;
+.form-control:focus {
+  border-color: #cccccc;
+  box-shadow: none;
 }
 
-.article .card-header{
-  background-color: #343a40;
-
+#bin {
+  /* border: 2px solid red; */
+  margin-top: 10px;
+  margin-left: 20px;
+  font-size: 17px;
+  color: var(--buttonColor);
 }
 
-.article .card-body{
-  background-color: rgba(0,0,0,0.4);
+#total {
+  font-weight: 900;
 }
-
-.article .publication-date{
-  text-align: right;
-}
-
-.article .addFavorite{
-  font-size: 1.4rem;
-  position: absolute;
-  top: 80px;
-  right: 10px;
-}
-
-.article .addFavorite .far{
-  color: rgba(0,0,0,0.2);
-}
-
-.article .addFavorite:hover{
-  color: yellow;
-  cursor: pointer;
-}
-
-.article .addFavorite.activated{
-  color: yellow;
-}   */
