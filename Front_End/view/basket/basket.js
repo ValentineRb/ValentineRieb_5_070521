@@ -1,46 +1,128 @@
+// -------------------------------------------------------------------------------------------
+/// Function called when the page is loaded.
 (async () => {
-  displayBasketItems()
+  let basket = getBasketFromLocalStorage()
+  displayAllProductsInBasket(basket)
   displayTotalPrice()
+  // console.log(productsFromLocalStorage)
+  // Check if basket is empty, redirect to home page.
+  if (isBasketEmpty(basket)) {
+    redirectToHomePage()
+  }
 })()
 
-function displayBasketItems() {
-  // Récupérer les éléments du panier.
-  const basketItems = basket.getBasketItems()
+// -------------------------------------------------------------------------------------------------
+/// Get data from local storage. Data are a collection of key:value pairs.
+/// Key = productId + productColor : Value = {productName:"...", productId:"...",...}
+function getBasketFromLocalStorage() {
+  let basket = JSON.parse(localStorage.getItem('localStorageBasket'))
+  return basket
+}
 
-  // Loop over basketItems et hydrate
-  for(let key in basketItems) {
-    displayBasketItem(basketItems[key])
+// -------------------------------------------------------------------------------------------------
+/// Loop over keys in the basket object and display the values that are attached to them.
+function displayAllProductsInBasket(basket) {
+  for (const key in basket) {
+    if (Object.hasOwnProperty.call(basket, key)) {
+      const product = basket[key]
+      displaySingleProductInBasket(product)
+    }
   }
 }
 
-function displayBasketItem(basketItem) {
-  // 1. Récupérer l'élément template qui est invisible lors du chargement de la page.
-  const templateElementBasket = document.getElementById("template-basket-item")
-
-  // 2. Clôner le template.
-  let cloneElementBasket = document.importNode(templateElementBasket.content, true)
-
-  // 3. Remplir le clône avec les informations du product.
-  const productName = basketItem["productName"]
-  const productColor = basketItem["productColor"]
-  const productQuantity = basketItem["productQuantity"]
-  const productPrice = basketItem["productPrice"]
-  cloneElementBasket.getElementById('name-and-color').textContent = productName + `, ` + productColor
-  cloneElementBasket.getElementById('quantity').value = productQuantity
-  cloneElementBasket.getElementById('price').textContent = productPrice * productQuantity + `.00 €`
-
-  
-  // Add events
-  // cloneElementBasket.getElementById('quantity').onchange = (e) => {
-  //   e.preventDefault()
-  //   basket.updateBasketItemQuantity(basketItem["productId"], productColor, e.target.value)
-  // }
-
-  // 4. Ajouter le clône dans le DOM à l'endroit approprié, à savoir le parent contenant le child template.
-  document.getElementById("row-template").appendChild(cloneElementBasket)
+// -------------------------------------------------------------------------------------------------
+/// Display one product in the basket.
+function displaySingleProductInBasket(product) {
+  // 1. Access to the template
+  const templateElt = document.getElementById('template-basket-item')
+  // 2. Clone the template
+  const templateEltClone = document.importNode(templateElt.content, true)
+  // 3. Populate the template
+  templateEltClone.getElementById("name-and-color").textContent = product.productName + `, ` + product.productColor
+  templateEltClone.getElementById("quantity").value = product.productQuantity
+  templateEltClone.getElementById("price").textContent = product.productPrice * product.productQuantity +`.00 €`
+  // 4. Add an event on the element 'quantity' to update the quantity of the product in the basket.
+  templateEltClone.getElementById('quantity').addEventListener('change', function(event) {
+    // 5. Store the value of the input changed by the user.
+    const newQuantity = Number(event.target.value)
+    // 6. Update the quantity in the local storage.
+    updateProductQuantity(product.productId, product.productColor, newQuantity)
+    // 7. Access to the id="price" in the HTML code by the parents of this element.
+    let priceElement = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector("#price")
+    // 8. Populate the HTML price element.
+    priceElement.textContent = product.productPrice * newQuantity + `.00 €`
+    displayTotalPrice()
+  })
+  // 9. Add an event on the element 'bin'.On the click the function is called to empty the basket.
+  templateEltClone.getElementById('bin').addEventListener('click', function(event) {
+    removeProductFromBasket(product.productId, product.productColor)
+    displayTotalPrice()
+  })
+  // 10. Push the template in the HTML code.
+  document.getElementById("row-template").appendChild(templateEltClone)
 }
 
+// -------------------------------------------------------------------------------------------------
+/// Function which updates the quantity in the local storage.
+function updateProductQuantity(productId, productColor, newQuantity) {
+  // 1. Store data from local storage in basket which is an objet {key:value}.
+  let basket = getBasketFromLocalStorage()
+  // 2. Construct the key which allows us to access the product whose quantity needs to be updated.
+  const basketKey = productId + productColor
+  // 3. Access to the product.
+  let productInBasket = basket[basketKey]
+  // 4. Access to its property productQuantity and update it with the new quantity.
+  productInBasket.productQuantity = newQuantity
+  // 5. Resave the basket in the local storage.
+  localStorage.setItem('localStorageBasket', JSON.stringify(basket))
+}
+
+// -------------------------------------------------------------------------------------------------
+/// Function which updates the quantity in the local storage.
+function removeProductFromBasket(productId, productColor) {
+  // 1. Store data from local storage in basket which is an objet {key:value}.
+  let basket = getBasketFromLocalStorage()
+  // 2. Construct the key which allows us to access the product to be deleted.
+  const basketKey = productId + productColor
+  // 3. Remove the product.
+  delete basket[basketKey]
+  // 4. Resave the basket in the local storage.
+  localStorage.setItem('localStorageBasket', JSON.stringify(basket))
+}
+
+// -------------------------------------------------------------------------------------------------
+/// Redirect to the home page.
+function redirectToHomePage() {
+  location.href = "/Front_End/view/home/index.html"
+}
+
+// -------------------------------------------------------------------------------------------------
+/// Check if basket is empty.
+function isBasketEmpty(basket) {
+  for(let key in basket) {
+      if(basket.hasOwnProperty(key))
+          return false;
+  }
+  return true;
+}
+
+// -------------------------------------------------------------------------------------------------
+/// Calculate total price of the order.
+function calculateTotalPrice(basket) {
+  let totalPrice = 0
+  for (const key in basket) {
+    const product = basket[key]
+    const price = product.productPrice
+    const quantity = product.productQuantity
+    totalPrice += price * quantity
+  }
+  return totalPrice
+}
+
+// -------------------------------------------------------------------------------------------------
+/// Calculate total price of the order.
 function displayTotalPrice() {
-  // Afficher le prix total de la commande.
-  document.getElementById('total').textContent = basket.totalPrice() + `.00 €`
+  const basket = getBasketFromLocalStorage()
+  const totalPrice = calculateTotalPrice(basket)
+  document.getElementById('total').textContent = totalPrice + `.00 €`
 }

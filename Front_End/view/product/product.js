@@ -1,130 +1,132 @@
 // -------------------------------------------------------------------------------------------
-/// Code à exécuter lors du chargement de la page.
-/// L'écriture ci-dessous est la syntaxe usuelle pour définir et appeler une fonction fléchée en même temps:
-/// ( keyword (params) => instructions )( args ) - le keyword peut être vide ou async par exemple.
-/// Cette syntaxe évite de faire un appel et une définition séparés d'une fonction main().
+/// Function called when the page is loaded.
 (async () => {
-  const productId = getProductId()
-  const product = await getProductFromServer(productId)
-  displayProduct(product)
-  displayColorChoices(product)
-
-  document.getElementById('add-to-basket').onclick = (event) => {
-    event.preventDefault()
-    basket.addBasketItem(product)
-  }
-
-  document.getElementById('test-update').onclick = (event) => {
-    event.preventDefault()
-    basket.updateBasketItemQuantity(product, 100)
-  }
-
-  document.getElementById('test-remove').onclick = (event) => {
-    event.preventDefault()
-    basket.removeBasketItem(product)
-  }
+  const selectedProductId = getSelectedProductId()
+  const selectedProduct = await getSelectedProductFromServer(selectedProductId)
+  displaySelectedProduct(selectedProduct)
+  displayAvailableColors(selectedProduct)
+  addToBasket(selectedProduct)
+  console.log (selectedProductId)
+  console.log (selectedProduct)
 })()
 
-// -------------------------------------------------------------------------------------------
-/// Récupérer et retourner l'id du produit à partir de l'URL.
-function getProductId() {
-  let str = window.location.href
-  let url = new URL(str)
-  return url.searchParams.get("id")
-}
 
 // -------------------------------------------------------------------------------------------
-/// 1. On veut envoyer une requête à l'API pour qu'elle nous retourne des données du produit.
-/// Données retournées = httpResponseBody 
-/// 2. Pour lire la httpResponseBody on appelle la méthode json()
-/// Données retournées = Une promesse qui s'auto-résout en renvoyant le corps/body de la requête parsée au format JSON.
-/// 3. Si une erreur est rencontrée, elle est utilisée pour renvoyer un message d'erreur à l'utilisateur.
-async function getProductFromServer(productId) {
-  return fetch(`http://localhost:3000/api/teddies/${productId}`)
-    .then(httpResponseBody => httpResponseBody.json())
+/// The product.html URL has been customized such that it contains the selected product ID:
+/// "/Front_End/view/product/product.html?id=5be9c8541c9d440000665243"
+/// It has been customized when the product was displayed on the home page.
+/// This function extracts the productId from the URL.
+function getSelectedProductId() {
+  // 1. Store URL of the current page.
+  let currentPage = window.location.href
+  // 2. Create new object URL.
+  let newURL = new URL(currentPage)
+  // 3. Use URL property searchParams and method get() to get the search parameter after "?"id"=....".
+  return newURL.searchParams.get("id")
+}
+
+// -------------------------------------------------------------------------------------------------
+/// Get data from the API for a given productId.
+async function getSelectedProductFromServer(selectedProductId) {
+  const url = `http://localhost:3000/api/teddies/${selectedProductId}`
+  return fetch(url)
+    .then(res => res.json())
+      .then(data => data)
       .catch(error => alert(error.message + ": La connexion au serveur n'a pas pu être effectué."))
 }
 
-// -------------------------------------------------------------------------------------------
-/// Afficher un seul produit.
-function displayProduct(product) {
-  // 1. Récupérer l'élément template qui est invisible lors du chargement de la page.
-  const templateElement = document.getElementById("template-selection")
-
-  // 2. Clôner le template.
-  let cloneElement = document.importNode(templateElement.content, true)
-
-  // 3. Remplir le clône avec les informations du product.
-  cloneElement.getElementById("selection-name").textContent = product.name
-  cloneElement.getElementById("selection-image").src = product.imageUrl
-  cloneElement.getElementById("selection-price").innerHTML = product.price / 100 + `.00 €`
-  cloneElement.getElementById("selection-description").textContent = product.description
-  
-  // 4. Ajouter le clône dans le DOM à l'endroit approprié, à savoir le parent contenant le child template.
-  document.getElementById("row").appendChild(cloneElement)
+// -------------------------------------------------------------------------------------------------
+/// Display the selected product.
+function displaySelectedProduct(selectedProduct) {
+  // 1. Access to the template.
+  const templateElt = document.getElementById('template-selection')
+  // 2. Clone the template.
+  const templateEltClone = document.importNode(templateElt.content, true)
+  // 3. Populate the template.
+  templateEltClone.getElementById("selection-name").textContent = selectedProduct.name
+  templateEltClone.getElementById("selection-image").src = selectedProduct.imageUrl
+  templateEltClone.getElementById("selection-price").innerHTML = selectedProduct.price / 100 + `.00 €`
+  templateEltClone.getElementById("selection-description").textContent = selectedProduct.description
+  // 4. Push the template in HTML code.
+  document.getElementById("row").appendChild(templateEltClone)
 }
 
-// -------------------------------------------------------------------------------------------
-/// Afficher les choix de couleurs disponibles.
-function displayColorChoices(product) {
-  const colors = product.colors;
-  for (i = 0; i < colors.length; i++) {
-    displayColorChoice(colors[i])
+// -------------------------------------------------------------------------------------------------
+/// Display color dropdown list.
+function displayAvailableColors(selectedProduct) {
+  const colors = selectedProduct.colors
+  for (i= 0; i < colors.length; i++) {
+    const templateElt = document.getElementById('template-color-customization')
+    const templateEltClone = document.importNode(templateElt.content, true)
+    templateEltClone.getElementById('label-option').value = colors[i]
+    templateEltClone.getElementById('label-option').textContent = colors[i]
+    document.getElementById("color").appendChild(templateEltClone)
   }
 }
 
-// -------------------------------------------------------------------------------------------
-/// Afficher un choix de couleur.
-function displayColorChoice(color) {
-  // 1. Récupérer l'élément template qui est invisible lors du chargement de la page.
-  const templateElementForm = document.getElementById("template-color-customization")
+// -------------------------------------------------------------------------------------------------
+/// Store the product in the local storage.
+function addToBasket(selectedProduct) {
+  // 1. Pick up the button element from HTML.
+  const button = document.getElementById('add-to-basket')
+  // 2. Create click event.
+  button.addEventListener('click', function(event) {
+    // 3. PREVENDEFAULT COMMENTAIRE
+    event.preventDefault()
+    // 4. Add an alert if color is not selected.
+    const selectedColor = getSelectedColor()
+    if(selectedColor === "Sélectionner la couleur") {
+      alert ("Veuillez sélectionner une couleur.")
+    } else {
+      // 5. Otherwise, declare a variable called basket which is an empty object {key:value}.
+      let basket = {}
+      // 6. Get data from the local storage.
+      // 6.1. First check if there is already an item called 'localStorageBasket' in the local storage.
+      if(localStorage.getItem('localStorageBasket')) {
+        // 6.2. If so, get the item 'localStorageBasket' which is in string format then convert it into a JavaScript object stored in the object basket.
+        basket = JSON.parse(localStorage.getItem('localStorageBasket'))
+      }
+      // 7. Check if the newly selected product is already in the basket.
+      // If so, we only increment the quantity otherwise we add a new {key:value} pair to the object basket.
+      // 7.1. Create the key corresponding to the selected product.
+      const basketKey = selectedProduct._id + selectedColor
+      // 7.2. does the key already exist?
+      if(basketKey in basket) {
+        // 7.3. Access to the value of the key and store it in a variable.
+        let productAlreadyInBasket = basket[basketKey]
+        // 7.4. Increment the quantity.
+        productAlreadyInBasket.productQuantity++
+      } else {
+        // 7.5. Create new object key:value pair defining the selected product. This will be the value of the key to be added to basket objet.
+        let selectedProductInBasket = {
+          productName : selectedProduct.name,
+          productId : selectedProduct._id,
+          productColor : selectedColor,
+          productPrice : selectedProduct.price / 100,
+          productQuantity : 1
+          }
+        // 8. Add new {key:value} pair into the object basket.
+        basket[basketKey] = selectedProductInBasket
+      }
+      // 9. Convert the JavaScript object into a string and store it creating a new {key:value} pair into the local storage.
+      localStorage.setItem('localStorageBasket', JSON.stringify(basket))
+      // 10. Redirect to basket page.
+      redirectToBasketPage()
+    }
+  })
+}
+// console.log(typeof(localStorage.getItem('localStorageBasket')))
+// console.log(typeof(basket))
 
-  // 2. Clôner le template.
-  let cloneElementForm = document.importNode(templateElementForm.content, true)
-
-  // 3. Remplir le clône avec les informations du product.
-  cloneElementForm.getElementById("label-option").textContent = color
-  cloneElementForm.getElementById("label-option").setAttribute("value", color)
-
-  // 4. Ajouter le clône dans le DOM à l'endroit approprié, à savoir le parent contenant le child template.
-  document.getElementById("color").appendChild(cloneElementForm)
+// -------------------------------------------------------------------------------------------------
+/// Get the color selection value.
+function getSelectedColor() {
+  const selectedColorElement = document.getElementById("color")
+  return selectedColorElement.value
 }
 
-  // -------------------------------------------------------------------------------------------
-  /// EXPLICATIONS SUPPLEMENTAIRES / SYNTAXES COMPLEMENTAIRES
-
-  // -------------------------------------------------------------------------------------------
-  // const element = document.getElementById('add-to-basket')
-  // element.addEventListener('click', function(event){
-  //   event.preventDefault()
-  //   basket.addBasketItem(product)
-  // })
-  // Add event listeners on button
-
-  // -------------------------------------------------------------------------------------------
-  // const form = document.createElement('form');
-  // document.getElementById("selection-customization").appendChild(form);
-
-  // const formBlocP = document.createElement('p');
-  // //formP.class ='colors-choice';
-  // form.appendChild(formBlocP);
-
-  // const label = document.createElement('label');
-  // formBlocP.appendChild(label);
-  // label.setAttribute('for', "color");
-  // label.innerHTML ="Personnalisez votre ourson : " + `<br/> <br/>`;
-
-  // const select = document.createElement('select');
-  // formBlocP.appendChild(select);
-  // select.setAttribute('name', "color");
-  // select.setAttribute('id',"color");
-
-  // const colors = product.colors;
-  // for (i = 0; i < colors.length; i++) {
-  //   const option = document.createElement('option');
-  //   select.appendChild(option);
-  //   option.setAttribute('value', "product-colors");
-  //   option.textContent = colors[i];
-  // }
-
-  // document.getElementById("row").appendChild(cloneElementForm)
+// -------------------------------------------------------------------------------------------------
+/// Redirect to the basket page.
+function redirectToBasketPage() {
+  location.href = "/Front_End/view/basket/basket.html"
+}

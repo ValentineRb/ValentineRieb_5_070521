@@ -1,46 +1,60 @@
 // -------------------------------------------------------------------------------------------
-/// Code à exécuter lors du chargement de la page.
-/// L'écriture ci-dessous est la syntaxe usuelle pour définir et appeler une fonction fléchée en même temps:
-/// ( keyword (params) => instructions )( args ) - le keyword peut être vide ou async par exemple.
-/// Cette syntaxe évite de faire un appel et une définition séparés d'une fonction main().
+/// Function called when the page is loaded.
 (async () => {
   const products = await getProductsFromServer()
-  displayAllProducts(products)
+  displayProducts(products)
+  // console.log(products)
 })()
 
-// -------------------------------------------------------------------------------------------
-/// 1. On veut envoyer une requête à l'API pour qu'elle nous retourne des données.
-/// Données retournées = httpResponseBody 
-/// 2. Pour lire la httpResponseBody on appelle la méthode json()
-/// Données retournées = Une promesse qui s'auto-résout en renvoyant le corps/body de la requête parsée au format JSON.
-/// 3. Si une erreur est rencontrée, elle est utilisée pour renvoyer un message d'erreur à l'utilisateur.
+// -------------------------------------------------------------------------------------------------
+/// Get data from the API
 async function getProductsFromServer() {
-  return fetch("http://localhost:3000/api/teddies")
-    .then(httpResponseBody => httpResponseBody.json())
+  const url = "http://localhost:3000/api/teddies"
+  return fetch(url)
+  .then(res => res.json())
+    .then(data => data)
       .catch(error => alert(error.message + ": La connexion au serveur n'a pas pu être effectué."))
 }
 
-// -------------------------------------------------------------------------------------------
-/// Afficher tous les produits en les parcourant un par un.
-function displayAllProducts(products) {
-  products.forEach(product => displaySingleProduct(product))
+// -------------------------------------------------------------------------------------------------
+/// Loop over all products and display them.
+function displayProducts(products) {
+  for (const product of products) {
+    displayProduct(product)
+  }
+  // for (let index = 0; index < products.length; index++) {
+  //   displayProduct(products[index])
+  // }
+
+  // products.forEach(product => {
+  //   displayProduct(product)
+  // });
+
+  // products.forEach(function(product){
+  //   displayProduct(product)
+  // });
+
+  // for (const key in products) {
+  //   if (Object.hasOwnProperty.call(products, key)) {
+  //     displayProduct(products[key])
+  //   }
+  // }
 }
 
-// -------------------------------------------------------------------------------------------
-/// Afficher un seul produit.
-function displaySingleProduct(product) {
-  // 1. Récupérer l'élément template qui est invisible lors du chargement de la page.
-  const templateElement = document.getElementById("template-card")
-
-  // 2. Clôner le template.
-  let cloneElement = document.importNode(templateElement.content, true)
-
-  // 3. Remplir le clône avec les informations du product.
-  cloneElement.getElementById("card-title").textContent = product.name
-  cloneElement.getElementById("card-image").src = product.imageUrl
-  cloneElement.getElementById("card-footer-text").innerHTML = product.price / 100 + `.00 €`
-  cloneElement.getElementById("card-link").href = `/Front_End/view/product/product.html?id=${product._id}` // URL product personnalisé
-
-  // 4. Ajouter le clône dans le DOM à l'endroit approprié, à savoir le parent contenant le child template.
-  document.getElementById("row").appendChild(cloneElement)
+// -------------------------------------------------------------------------------------------------
+/// Display a single product via cloning a template, populating and appending the clone to the HTML code.
+function displayProduct(product) {
+  // 1. Access to the template.
+  const templateElt = document.getElementById('template-card')
+  // 2. Clone the template.
+  let templateEltClone = document.importNode(templateElt.content, true)
+  // 3. Populate the template.
+  templateEltClone.getElementById('card-title').textContent = product.name
+  templateEltClone.getElementById('card-image').src = product.imageUrl
+  templateEltClone.getElementById('card-footer-text').textContent = product.price / 100 + `.00 €`
+  // 4. Customize the product.html URL attached to the current card such that it contains the product ID:
+  // "/Front_End/view/product/product.html?id=5be9c8541c9d440000665243"
+  templateEltClone.getElementById("card-link").href = `/Front_End/view/product/product.html?id=${product._id}`
+  // 5. Push the template in HTML code.
+  document.getElementById('row').appendChild(templateEltClone)
 }
