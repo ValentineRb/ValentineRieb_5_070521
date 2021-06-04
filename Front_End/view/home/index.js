@@ -3,7 +3,6 @@
 (async () => {
   const products = await getProductsFromServer()
   displayProducts(products)
-  // console.log(products)
 })()
 
 // -------------------------------------------------------------------------------------------------
@@ -22,23 +21,6 @@ function displayProducts(products) {
   for (const product of products) {
     displayProduct(product)
   }
-  // for (let index = 0; index < products.length; index++) {
-  //   displayProduct(products[index])
-  // }
-
-  // products.forEach(product => {
-  //   displayProduct(product)
-  // });
-
-  // products.forEach(function(product){
-  //   displayProduct(product)
-  // });
-
-  // for (const key in products) {
-  //   if (Object.hasOwnProperty.call(products, key)) {
-  //     displayProduct(products[key])
-  //   }
-  // }
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -54,7 +36,7 @@ function displayProduct(product) {
   templateEltClone.getElementById('card-footer-text').textContent = product.price / 100 + `.00 €`
   // 4. Customize the product.html URL attached to the current card such that it contains the product ID:
   // "/Front_End/view/product/product.html?id=5be9c8541c9d440000665243"
-  templateEltClone.getElementById("card-link").href = `/Front_End/view/product/product.html?id=${product._id}`
+  templateEltClone.getElementById("card-link").href = `../product/product.html?id=${product._id}`
   // 5. Push the template in HTML code.
   document.getElementById('row').appendChild(templateEltClone)
 }

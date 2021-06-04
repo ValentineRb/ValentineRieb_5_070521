@@ -6,7 +6,7 @@
     <meta name="title" content="Orinoco" />
     <meta name="description" content="" />
     <title>Orinoco</title>
-    <link rel="shortcut icon" type="image/x-icon" href="/Front_End/img/favico.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favico.ico" />
 
     <!-- METATAGS -->
     <!-- OpenGraph data -->
@@ -30,7 +30,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous" />
-    <link rel="stylesheet" href="/Front_End/css/style.css" />
+    <link rel="stylesheet" href="../../css/style.css" />
     <!-- FONTAWESONE -->
     <script src="https://kit.fontawesome.com/af249e68ba.js" crossorigin="anonymous"></script>
   </head>
@@ -40,8 +40,8 @@
     <header>
       <nav class="navbar navbar-expand-md navbar-light">
         <div class="container">
-          <a class="navbar-brand" href="/Front_End/view/home/index.html">
-            <img id="logo"src="/Front_End/img/orinoco-logo.JPG" alt="logo orinoco" />
+          <a class="navbar-brand" href="../home/index.html">
+            <img id="logo" src="../../img/orinoco-logo.JPG" alt="logo orinoco" />
           </a>
           <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNavbar">
             <span class="navbar-toggler-icon"></span>
@@ -49,13 +49,13 @@
           <div class="navbar-collapse collapse" id="collapseNavbar">
             <ul class="navbar-nav ms-auto">
               <li class="nav-item">
-                <a class="nav-link" href="/Front_End/view/home/index.html">Accueil</a>
+                <a class="nav-link" href="../home/index.html">Accueil</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Mon compte</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/Front_End/view/basket/basket.html">Mon panier</a>
+                <a class="nav-link" href="../basket/basket.html">Mon panier</a>
               </li>
             </ul>
           </div>
@@ -79,10 +79,8 @@
               <h3 class="col-3 text-center">Description</h3>
               <h3 class="col-3 text-center">Quantité</h3>
               <h3 class="col-3 text-center">Prix</h3>
-              <h3 class="col-3 text-center"></h3>
           </div>
         </div>
-        
         <div class="container">
           <div id ="row-template" class="row">
             <template id="template-basket-item">
@@ -90,11 +88,10 @@
               <p id="name-and-color" class="col-lg-3 col-md-3 col-sm-12 text-center">Name and Color</p>
               <div class="col-lg-9 col-md-9 col-sm-12 d-flex text-center">
                 <div class="test col-4 d-flex justify-content-center align-self-baseline">
-                  <form id="form-quantity"class="">
+                  <form id="form-quantity" class="">
                     <div class="form-group">
                       <div class="input-group">
                         <input id="quantity" class="form-control" type="number" name="number" value="" min="1" pattern="[0-9]">
-                        </input>
                       </div>
                     </div>
                   </form>
@@ -126,7 +123,7 @@
     <!--End of Main Section-->
 
     <!-- ScrollToTop Button -->
-    <a><button class="scroll-to-the-top-btn"><i class="fas fa-chevron-up"></i></button></a>
+    <button class="scroll-to-the-top-btn"><i class="fas fa-chevron-up"></i></button>
     <!-- ScrollToTop Button END-->
 
     <!--Footer-->
@@ -154,7 +151,7 @@
 
     <!--Script-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-    <script src="/Front_End/js/scrollButton.js"></script>
-    <script src="./basket.js"></script>
+    <script src="../../js/scrollButton.js"></script>
+    <script src="basket.js"></script>
   </body>
 </html>

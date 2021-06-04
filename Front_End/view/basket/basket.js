@@ -4,8 +4,6 @@
   let basket = getBasketFromLocalStorage()
   displayAllProductsInBasket(basket)
   displayTotalPrice()
-  // console.log(productsFromLocalStorage)
-  // Check if basket is empty, redirect to home page.
   if (isBasketEmpty(basket)) {
     redirectToHomePage()
   }
@@ -15,7 +13,7 @@
 /// Get data from local storage. Data are a collection of key:value pairs.
 /// Key = productId + productColor : Value = {productName:"...", productId:"...",...}
 function getBasketFromLocalStorage() {
-  let basket = JSON.parse(localStorage.getItem('localStorageBasket'))
+  let basket = JSON.parse(localStorage.getItem('localStorageBasket')) || {}
   return basket
 }
 
@@ -93,7 +91,7 @@ function removeProductFromBasket(productId, productColor) {
 // -------------------------------------------------------------------------------------------------
 /// Redirect to the home page.
 function redirectToHomePage() {
-  location.href = "/Front_End/view/home/index.html"
+  location.href = "../home/index.html"
 }
 
 // -------------------------------------------------------------------------------------------------

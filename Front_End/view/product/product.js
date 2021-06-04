@@ -1,22 +1,19 @@
 // -------------------------------------------------------------------------------------------
 /// Function called when the page is loaded.
 (async () => {
-  const selectedProductId = getSelectedProductId()
+  const selectedProductId = getSelectedProductIdFromUrl()
   const selectedProduct = await getSelectedProductFromServer(selectedProductId)
   displaySelectedProduct(selectedProduct)
   displayAvailableColors(selectedProduct)
   addToBasket(selectedProduct)
-  console.log (selectedProductId)
-  console.log (selectedProduct)
 })()
-
 
 // -------------------------------------------------------------------------------------------
 /// The product.html URL has been customized such that it contains the selected product ID:
 /// "/Front_End/view/product/product.html?id=5be9c8541c9d440000665243"
 /// It has been customized when the product was displayed on the home page.
 /// This function extracts the productId from the URL.
-function getSelectedProductId() {
+function getSelectedProductIdFromUrl() {
   // 1. Store URL of the current page.
   let currentPage = window.location.href
   // 2. Create new object URL.
@@ -115,8 +112,6 @@ function addToBasket(selectedProduct) {
     }
   })
 }
-// console.log(typeof(localStorage.getItem('localStorageBasket')))
-// console.log(typeof(basket))
 
 // -------------------------------------------------------------------------------------------------
 /// Get the color selection value.
@@ -128,5 +123,5 @@ function getSelectedColor() {
 // -------------------------------------------------------------------------------------------------
 /// Redirect to the basket page.
 function redirectToBasketPage() {
-  location.href = "/Front_End/view/basket/basket.html"
+  location.href = "../basket/basket.html"
 }
