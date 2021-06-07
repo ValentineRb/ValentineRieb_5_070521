@@ -1,7 +1,8 @@
 // -------------------------------------------------------------------------------------------
 /// Function called when the page is loaded.
-(async () => {
+(() => {
   let basket = getBasketFromLocalStorage()
+  console.log(basket)
   displayAllProductsInBasket(basket)
   displayTotalPrice()
   if (isBasketEmpty(basket)) {
