@@ -2,11 +2,11 @@
 /// Function called when the page is loaded.
 (() => {
   let basket = getBasketFromLocalStorage()
-  console.log(basket)
   displayAllProductsInBasket(basket)
   displayTotalPrice()
+  sendOrder(basket)
   if (isBasketEmpty(basket)) {
-    redirectToHomePage()
+    alertEmptyBasket()
   }
 })()
 
@@ -90,23 +90,24 @@ function removeProductFromBasket(productId, productColor) {
 }
 
 // -------------------------------------------------------------------------------------------------
-/// Redirect to the home page.
-function redirectToHomePage() {
-  location.href = "../home/index.html"
+/// Alert when basket is empty.
+function alertEmptyBasket() {
+  alert("Votre panier est vide.")
 }
 
 // -------------------------------------------------------------------------------------------------
 /// Check if basket is empty.
 function isBasketEmpty(basket) {
-  for(let key in basket) {
-      if(basket.hasOwnProperty(key))
-          return false;
+  for (let key in basket) {
+    if (basket.hasOwnProperty(key)) {
+      return false
+    }
   }
   return true;
 }
 
 // -------------------------------------------------------------------------------------------------
-/// Calculate total price of the order.
+/// Calculate total price of the order and add it in session storage.
 function calculateTotalPrice(basket) {
   let totalPrice = 0
   for (const key in basket) {
@@ -115,6 +116,7 @@ function calculateTotalPrice(basket) {
     const quantity = product.productQuantity
     totalPrice += price * quantity
   }
+  sessionStorage.setItem('totalPrice', totalPrice)
   return totalPrice
 }
 
@@ -123,5 +125,119 @@ function calculateTotalPrice(basket) {
 function displayTotalPrice() {
   const basket = getBasketFromLocalStorage()
   const totalPrice = calculateTotalPrice(basket)
-  document.getElementById('total').textContent = totalPrice + `.00 €`
+  document.getElementById('total').textContent = `Montant total de `+ totalPrice + `.00 €`
+}
+
+// -------------------------------------------------------------------------------------------------
+/// Send order.
+function sendOrder(basket) {
+  // Get the form and define actions on submit event.
+  const customerForm = document.getElementById('customer-form')
+  customerForm.addEventListener('submit', e => {
+    e.preventDefault()
+    if (!isBasketEmpty(basket)) {
+      // Get form elements by name.
+      const firstNameField = customerForm.elements["first-name"]
+      const lastNameField = customerForm.elements["last-name"]
+      const emailField = customerForm.elements["email"]
+      const addressField = customerForm.elements["address"]
+      const cityField = customerForm.elements["city"]
+      // Check inputs validity.
+      const isValidForm = validateForm(firstNameField, lastNameField, emailField, addressField, cityField)
+      if (isValidForm) {
+        // Build order.
+        const order = buildOrder(firstNameField.value, lastNameField.value, emailField.value, addressField.value, cityField.value, basket)
+        // Send order.
+        post(order)
+      }
+    } else {
+      alertEmptyBasket()
+      customerForm.reset()
+    }
+  })
+}
+
+// -------------------------------------------------------------------------------------------------
+/// Validate form.
+function validateForm(firstNameField, lastNameField, emailField, addressField, cityField) {
+  const onlyTextRegex = /^[ A-zÀ-ÿ\-\']+$/
+  const alphanumericTextRegex = /^[ 0-9A-zÀ-ÿ\-\']+$/
+  const emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+  const isValidForm = validateField(firstNameField, onlyTextRegex)
+  && validateField(lastNameField, onlyTextRegex)
+  && validateField(emailField, emailRegex)
+  && validateField(addressField, alphanumericTextRegex)
+  && validateField(cityField, onlyTextRegex)
+  return isValidForm
+}
+
+// -------------------------------------------------------------------------------------------------
+/// Validate user input.
+function validateField(field, regex) {
+  // If field.value contains only caracters from the regex, test() function will return true.
+  // If field.value contains at least one caracter which is not from the regex, test() function will return false.
+  const isValidInput = regex.test(field.value)
+  // Alert if user input is invalid.
+  if (!isValidInput) {
+    alert("Veuillez remplir le champ " + field.labels[0].textContent + " correctement afin de valider la commande.")
+  }
+  return isValidInput
+}
+
+// -------------------------------------------------------------------------------------------------
+/// Build order with the contact objet and the array of product ids.
+function buildOrder(firstName, lastName, email, address, city, basket) {
+  // Build contact object.
+  const contact = {
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    address: address,
+    city: city
+  }
+  // Get an array of product ids.
+  const productIds = getProductIds(basket)
+  // Build the order object.
+  const order = {
+    contact: contact,
+    products: productIds
+  }
+  return order
+}
+
+// -------------------------------------------------------------------------------------------------
+/// Get an array of product ids.
+function getProductIds(basket) {
+  let productIds = []
+  for (const key in basket) {
+    if (basket.hasOwnProperty(key)) {
+      const productInBasket = basket[key]
+      const productInBasketId = productInBasket.productId
+      // If productInBasketId is not already in productIds array it will be added.
+      if (!productIds.includes(productInBasketId)) {
+        productIds.push(productInBasketId)
+      }
+    }
+  }
+  return productIds
+}
+
+// -------------------------------------------------------------------------------------------------
+/// Post order.
+function post(order) {
+  const requestParams = {
+    method: 'POST',
+    body: JSON.stringify(order),
+    headers: {'Content-Type': 'application/json'}
+  }
+  const url = "http://localhost:3000/api/teddies/order"
+  fetch(url, requestParams)
+  .then(response => response.json())
+    .then(data => {
+      console.log(data.orderId)
+      localStorage.removeItem('localStorageBasket')
+      document.getElementById('customer-form').reset()
+      window.location.href = `../confirmation/confirmation.html?orderId=${data.orderId}`
+    })
+    .catch(error => alert(error.message + ": La connexion au serveur n'a pas pu être effectué."))
 }

@@ -27,7 +27,7 @@ function getSelectedProductIdFromUrl() {
 async function getSelectedProductFromServer(selectedProductId) {
   const url = `http://localhost:3000/api/teddies/${selectedProductId}`
   return fetch(url)
-    .then(res => res.json())
+    .then(response => response.json())
       .then(data => data)
       .catch(error => alert(error.message + ": La connexion au serveur n'a pas pu être effectué."))
 }

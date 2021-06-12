@@ -110,7 +110,7 @@
           <div class="row">
             <p class="col-md-3 d-none d-md-block"></p>
             <p class="col-md-3 d-none d-md-block"></p>
-            <p id="total" class="col-md-3 text-center"></p>
+            <p class="col-md-3 text-center" id="total"></p>
             <p class="col-md-3 d-none d-md-block"></p>
           </div>
         </div>
@@ -120,33 +120,39 @@
               <div class="col-lg-7 col-md-8 col-sm-9 col-10 text-center">
                   <h2>Vos informations</h2>
                   <div class="card card-form">
-                      <form class="form-basket">
+                      <form id="customer-form">
                         <div class="row">
-                          <label class="d-flex">Prénom</label><input type="text" id="fname" name="fname" placeholder="">
+                          <label for="first-name" class="d-flex">Prénom <span class="mandatory">​*</span></label>
+                          <input type="text" id="first-name" name="first-name" required>
                         </div>
                         <br/>
                         <div class="row">
-                            <label class="d-flex">Nom</label><input type="text" id="lname" name="lname" placeholder="">
+                            <label for="last-name" class="d-flex">Nom <span class="mandatory">​*</span></label>
+                            <input type="text" id="last-name" name="last-name" required>
                         </div>
                         <br/>
                         <div class="row">
-                          <label class="d-flex">Email</label><input type="email" id="email" name="email" placeholder="">
+                          <label for="email" class="d-flex">Email <span class="mandatory">​*</span></label>
+                          <input type="email" id="email" name="email" required>
                         </div>
                         <br/>
                         <div class="row">
-                          <label class="d-flex">Adresse</label><input type="text" id="address" name="address" placeholder="">
+                          <label for="address" class="d-flex">Adresse <span class="mandatory">​*</span></label>
+                          <input type="text" id="address" name="address" required>
                         </div>
                         <br/>
                         <div class="row">
-                          <label class="d-flex">Ville</label><input type="text" id="city" name="city" placeholder="">
+                          <label for="city" class="d-flex">Ville <span class="mandatory">​*</span></label>
+                          <input type="text" id="city" name="city" required>
                         </div>
+                        <div class="container text-center">
+                          <button id="button-submit" type="submit" name="valider" value="Valider la commande">Valider la commande</button>
+                        </div>
+                        <p class="text-start info"><span class="mandatory">​*</span> Champs obligatoires</p>
                       </form>
                   </div>
               </div>
           </div>
-        </div>
-        <div class="container text-center">
-          <button type="button">Valider la commande</button>
         </div>
         <br/>
       </section>

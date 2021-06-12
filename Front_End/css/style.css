@@ -149,6 +149,8 @@ button:hover {
   background-color: var(--backgroundColor);
   color: var(--buttonColor);
   border: 2px solid var(--buttonColor);
+  transform: scale(.95);
+  transition: 0.1s;
 }
 
 select {
@@ -177,7 +179,7 @@ select {
 }
 
 #total {
-  font-weight: 900;
+  font-weight: 500;
   font-size: 18px;
 }
 
@@ -187,4 +189,36 @@ select {
   margin-bottom: 30px;
   border: none;
   box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.2);
+}
+
+input {
+  border: 1px solid rgb(223, 222, 222);
+}
+
+label {
+  font-size: 15px;
+}
+
+.info{
+  font-size: 15px;
+}
+
+.mandatory{
+  color: red;
+}
+#button-submit {
+  margin-top: 20px;
+}
+
+/**************************/
+/*** CONFIRMATION PAGE ***/
+
+.confirmation-box{
+  margin-bottom: 40px;
+}
+
+#order-number,
+#order-price
+{
+  font-weight: bold;
 }
