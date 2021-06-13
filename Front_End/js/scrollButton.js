@@ -1,27 +1,26 @@
-/** ScrollToTop Button **/
-
+// -------------------------------------------------------------------------------------------------
+/// Get the scroll to the top button element.
 let scrollToTopBtn = document.querySelector(".scroll-to-the-top-btn");
 let rootElement = document.documentElement;
 
+// -------------------------------------------------------------------------------------------------
+/// Manage the button: Show or hide it.
 function handleScroll() {
-  // Do something on scroll
   let scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
   if (rootElement.scrollTop / scrollTotal > 0.7) {
-    // Show button
     scrollToTopBtn.classList.add("show-btn");
   } else {
-    // Hide button
     scrollToTopBtn.classList.remove("show-btn");
   }
 }
 
+// -------------------------------------------------------------------------------------------------
+/// Scroll to the top logic.
 function scrollToTop() {
-  // Scroll to top logic
-  rootElement.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
+  rootElement.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+// -------------------------------------------------------------------------------------------------
+/// Click and scroll events.
 scrollToTopBtn.addEventListener("click", scrollToTop);
 document.addEventListener("scroll", handleScroll);

@@ -26,7 +26,7 @@ main {
 }
 
 footer {
-  width:100%;
+  width: 100%;
 }
 
 /**************************/
@@ -57,17 +57,12 @@ h3 {
   font-size: 10px;
   line-height: 30px;
   width: 30px;
-  /* place it at the bottom right corner */
   position: fixed;
   bottom: 40px;
   right: 20px;
-  /* keep it at the top of everything else */
   z-index: 100;
-  /* hide with opacity */
-  /* opacity: 0; */
-  /* also add a translate effect */
+  opacity: 0;
   transform: translateY(100px);
-  /* and a transition */
   transition: all 1s ease;
 }
 
@@ -78,13 +73,13 @@ h3 {
 
 /**************************/
 /*** NAVBAR ***/
-#logo{
-  width:177px;
-  height:80px;
+#logo {
+  width: 177px;
+  height: 80px;
 }
 
 .navbar-light {
-  background-color:var(--backgroundColor);
+  background-color: var(--backgroundColor);
 }
 
 .nav-link {
@@ -130,7 +125,6 @@ h3 {
 
 /**************************/
 /*** PRODUCT PAGE ***/
-
 #selection-image {
   border: 1px solid var(--lineGrey);
   width: 90%;
@@ -149,7 +143,7 @@ button:hover {
   background-color: var(--backgroundColor);
   color: var(--buttonColor);
   border: 2px solid var(--buttonColor);
-  transform: scale(.95);
+  transform: scale(0.95);
   transition: 0.1s;
 }
 
@@ -157,7 +151,6 @@ select {
   font-size: 16px;
   padding: 8px;
 }
-
 
 /**************************/
 /*** BASKET PAGE ***/
@@ -171,7 +164,6 @@ select {
 }
 
 #bin {
-  /* border: 2px solid red; */
   margin-top: 10px;
   margin-left: 20px;
   font-size: 17px;
@@ -199,26 +191,25 @@ label {
   font-size: 15px;
 }
 
-.info{
+.info {
   font-size: 15px;
 }
 
-.mandatory{
+.mandatory {
   color: red;
 }
+
 #button-submit {
   margin-top: 20px;
 }
 
 /**************************/
 /*** CONFIRMATION PAGE ***/
-
-.confirmation-box{
+.confirmation-box {
   margin-bottom: 40px;
 }
 
 #order-number,
-#order-price
-{
+#order-price {
   font-weight: bold;
 }
