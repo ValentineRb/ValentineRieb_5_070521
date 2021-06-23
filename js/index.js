@@ -35,7 +35,7 @@ function displayProduct(product) {
   templateEltClone.getElementById("card-image").src = product.imageUrl;
   templateEltClone.getElementById("card-footer-text").textContent = product.price / 100 + `.00 €`;
   // 4. Customize the product.html URL attached to the current card such that it contains the product ID:
-  // "/Front_End/view/product/product.html?id=5be9c8541c9d440000665243"
+  // "/product.html?id=5be9c8541c9d440000665243"
   templateEltClone.getElementById("card-link").href = `product.html?id=${product._id}`;
   // 5. Push the template in HTML code.
   document.getElementById("row").appendChild(templateEltClone);

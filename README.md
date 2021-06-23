@@ -1,15 +1,19 @@
-# Orinoco #
+# Project n°5 - OpenClassrooms #
+### Construisez un site e-commerce: Orinoco ###
 
-This is the back end server for Project 5 of the Junior Web Developer path.
+### Prérequis: ###
 
-### Prerequisites ###
+Node.js et npm installés localement.
 
-You will need to have Node and `npm` installed locally on your machine.
+### Guide d'utilisation: ###
 
-### Installation ###
+Etapes à suivre pour la bonne utilisation de l'application en local:
 
-Clone this repo. From within the project folder, run `npm install`. You 
-can then run the server with `node server`. 
-The server should run on `localhost` with default port `3000`. If the
-server runs on another port for any reason, this is printed to the
-console when the server starts, e.g. `Listening on port 3001`.
+1. Cloner le repository depuis GitHub.
+2. Ouvrir le dossier avec Visual Studio Code.
+3. Lancer la commande `npm install` puis `node server`.
+4. Ouvrir le fichier index.html ou rendez-vous directement sur https://valentinerb.github.io/ValentineRieb_5_070521/
+
+Important:
+Le serveur doit fonctionner en `localhost` avec le port par défaut `3000`.
+Si le serveur fonctionne sur un autre port, la console l'indiquera au démarrage du serveur (par exemple:`Listening on port 3001`).

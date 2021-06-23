@@ -230,7 +230,6 @@ function post(order) {
   fetch(url, requestParams)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data.orderId);
       localStorage.removeItem("localStorageBasket");
       document.getElementById("customer-form").reset();
       window.location.href = `confirmation.html?orderId=${data.orderId}`;

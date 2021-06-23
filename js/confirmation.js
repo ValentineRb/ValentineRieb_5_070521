@@ -2,13 +2,12 @@
 /// Function called when the page is loaded.
 (() => {
   let orderId = getOrderIdFromUrl();
-  console.log(orderId);
   displayOrderId(orderId);
   displayTotalPrice();
 })();
 
 // -------------------------------------------------------------------------------------------
-/// Extarct the orderId from the URL.
+/// Extract the orderId from the URL.
 function getOrderIdFromUrl() {
   // 1. Store URL of the current page.
   let currentPage = window.location.href;
